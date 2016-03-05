@@ -481,7 +481,8 @@ public:
   }
   virtual void make_unique() { force_copy_fields= TRUE; }
   Item *get_tmp_table_item(THD *thd);
-  virtual Field *create_tmp_field(bool group, TABLE *table);
+  virtual Field *create_tmp_field(bool group, TABLE *table,
+                                  uint convert_blob_length);
   virtual bool collect_outer_ref_processor(uchar *param);
   bool init_sum_func_check(THD *thd);
   bool check_sum_func(THD *thd, Item **ref);
@@ -844,7 +845,7 @@ public:
     return has_with_distinct() ? "avg(distinct " : "avg("; 
   }
   Item *copy_or_same(THD* thd);
-  Field *create_tmp_field(bool group, TABLE *table);
+  Field *create_tmp_field(bool group, TABLE *table, uint convert_blob_length);
   void cleanup()
   {
     count= 0;
@@ -900,7 +901,7 @@ public:
   const char *func_name() const
     { return sample ? "var_samp(" : "variance("; }
   Item *copy_or_same(THD* thd);
-  Field *create_tmp_field(bool group, TABLE *table);
+  Field *create_tmp_field(bool group, TABLE *table, uint convert_blob_length);
   enum Item_result result_type () const { return REAL_RESULT; }
   enum_field_types field_type() const { return MYSQL_TYPE_DOUBLE;}
   void cleanup()
@@ -978,7 +979,8 @@ protected:
   bool any_value() { return was_values; }
   void no_rows_in_result();
   void restore_to_before_no_rows_in_result();
-  Field *create_tmp_field(bool group, TABLE *table);
+  Field *create_tmp_field(bool group, TABLE *table,
+			  uint convert_blob_length);
 };
 
 
